@@ -14,7 +14,7 @@ You are asked to implement a grade book to keep track student grades for several
 - [ ] The command that you use to get task 4, 5, 6, 7, 8, 9, 10, 11, 12;
 - [ ] The source code;
 - [x] A README file. The minimum required content of the file should contains the instructions to compile and execute your code;
-- []The test cases that you use and the results that you get from the test cases.
+- [ ]The test cases that you use and the results that you get from the test cases.
 
 ## 3. ERD
 ![Gradebook ERD](https://user-images.githubusercontent.com/70228981/114597965-5cf02400-9c5f-11eb-92af-b3d78b6c5215.jpg)
