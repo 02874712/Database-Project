@@ -1,11 +1,12 @@
 -- 2.1 Write the commands for creating tables;
+DROP TABLE IF EXISTS ENROLLMENT;
 CREATE TABLE ENROLLMENT (
   StudentID integer NOT NULL, 
   CourseID integer NOT NULL,
   PRIMARY KEY(StudentId, CourseId)
 );
 
-
+DROP TABLE IF EXISTS STUDENT;
 CREATE TABLE STUDENT (
   StudentID integer NOT NULL,
   F_NAME text,
@@ -13,6 +14,7 @@ CREATE TABLE STUDENT (
   PRIMARY KEY(StudentID)
 );
 
+DROP TABLE IF EXISTS COURSE;
 CREATE TABLE COURSE(
     CourseID integer NOT NULL unique,
     CourseNum integer NOT NULL,
@@ -23,6 +25,7 @@ CREATE TABLE COURSE(
     PRIMARY KEY(CourseID)
 );
 
+DROP TABLE IF EXISTS COMPUTATION;
 CREATE TABLE COMPUTATION(
     ComputationID integer NOT NULL,
     CourseID integer,
@@ -30,6 +33,7 @@ CREATE TABLE COMPUTATION(
     Percentage int
     );
 
+DROP TABLE IF EXISTS ASSIGNMENT;
 CREATE TABLE ASSIGNMENT(
     AssignmentID integer,
     ComputationID integer,
@@ -38,6 +42,7 @@ CREATE TABLE ASSIGNMENT(
     PRIMARY KEY(AssignmentID)
 );
 
+DROP TABLE IF EXISTS GRADE;
 CREATE TABLE GRADE(
     StudentID integer,
     AssignmentID integer,
@@ -46,7 +51,7 @@ CREATE TABLE GRADE(
 );
 
 -- 2.2 Write the commands for inserting values;
-INSERT INTO STUDENT values(12345, 'Hank', 'Voight');
+INSERT INTO STUDENT values(12345, 'Hank', 'Quoy');
 INSERT INTO STUDENT values(67890, 'Leslie', 'Shay');
 INSERT INTO STUDENT values(24680, 'Kelly', 'Severide');
 
@@ -192,17 +197,17 @@ Select * from COURSE;
 Select * from Enrollment;
 
 -- List Grade Computation by COURSE
-Select * from Computation
-where CourseID = 9876;
-Select * from Computation
-where CourseID = 8765;
-Select * from Computation
-where CourseID = 7654;
-Select * from Computation
-where CourseID = 6543;
+-- Select * from Computation
+-- Where CourseID = 9876;
+-- Select * from Computation
+-- Where CourseID = 8765;
+-- Select * from Computation
+-- Where CourseID = 7654;
+-- Select * from Computation
+-- where CourseID = 6543;
 
 -- Listing all Assignments
-Select * from ASSIGNMENT;
+-- Select * from ASSIGNMENT;
 
 -- Listing Scores by Students
 Select * from Grade
@@ -213,3 +218,58 @@ Where StudentID=67890;
 
 Select * from Grade
 Where StudentID=24680;
+
+-- 4. Compute the average/highest/lowest score of an assignment;
+-- Given Assignment Choosen: 15
+SELECT a.AssignmentID, avg(g.AwardedPoints), max(g.AwardedPoints), min(g.AwardedPoints)
+FROM ASSIGNMENT a, Grade g 
+WHERE a.AssignmentID=15 
+AND g.AssignmentID=a.AssignmentID;
+
+-- 5. List all of the students in a given course;
+-- Given Course Choosen: Pre-Calculus(9876)
+
+SELECT S.StudentID, S.F_NAME from STUDENT S 
+JOIN ENROLLMENT E 
+WHERE E.COURSEID = 9876 AND S.StudentID=E.StudentID;
+
+-- 6. List all of the students in a course and all of their scores on every assignment;
+
+-- SELECT E.StudentID,a.AssignmentID, g.AwardedPoints
+-- FROM ASSIGNMENT a, Grade g, ENROLLMENT E
+-- WHERE E.STUDENTID=G.STUDENTID AND E.COURSEID = 7654;-- AND g.AssignmentID=a.AssignmentID;
+
+-- 7. Add an assignment to a course;
+INSERT INTO ASSIGNMENT VALUES(29,14,100,1);
+
+-- 8. Change the percentages of the categories for a course;
+-- All components of the grade is worth 25
+UPDATE Computation 
+SET PERCENTAGE=25
+WHERE COURSEID=6543;
+
+Select * from Computation
+Where courseid = 6543;
+
+-- 9. Add 2 points to the score of each student on an assignment;
+UPDATE GRADE
+SET AwardedPoints=AwardedPoints+2
+WHERE AssignmentID=2;
+
+SELECT * FROM GRADE
+WHERE ASSIGNMENTID=2;
+
+-- 10.Add 2 points just to those students whose last name contains a ‘Q’.
+UPDATE GRADE
+SET AwardedPoints = AwardedPoints+2
+FROM GRADE G INNER JOIN STUDENT S 
+ON S.STUDENTID= G.STUDENTID
+WHERE S.L_NAME LIKE 'Q%';
+
+SELECT * 
+FROM GRADE G INNER JOIN STUDENT S ON G.STUDENTID= S.STUDENTID
+WHERE S.L_NAME LIKE 'Q%';
+-- 11.Compute the grade for a student;
+
+-- 12. Compute the grade for a student, where the lowest score for a given category is dropped.
+
